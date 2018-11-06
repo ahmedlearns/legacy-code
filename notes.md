@@ -1,5 +1,7 @@
 # Legacy Code: Rewrite, or Rejuvenate
 
+Based on https://www.youtube.com/watch?v=koGpF1solzM and https://www.youtube.com/watch?v=-lB74Zg3QSw
+
 ## Legacy Code
 - Who loves legacy code!?
 - Necessary evil
@@ -132,3 +134,18 @@ No more spaghetti code!
 ## Repeat with another module
 
 (If you have to)
+
+## Examples
+
+### Remove Singletons
+
+1. Separate stateful and stateless singletons
+2. Stateless ones don't need to be singletons
+3. Inject Stateless dependencies in the constructor
+4. Wrap static calls in stateless dependencies
+5. Use an App Context `interface` to share stateful singletons
+
+## Demo
+
+https://github.com/uberto/alchemical
+
