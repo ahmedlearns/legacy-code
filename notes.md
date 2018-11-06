@@ -18,9 +18,7 @@ Generally, any code that has been delivered. But there's also:
 - code someone else wrote
 
 
-
-
-## Fixing Issues as you go ~= Duck Tape solution
+## Fixing Issues as you go == Duck Tape solution
 
 ## Big Rewrite Risks
 
@@ -149,3 +147,40 @@ No more spaghetti code!
 
 https://github.com/uberto/alchemical
 
+## Method
+
+`0. Add a couple of EndToEnd tests` - not in this demo
+1) Remove direct use of singletons from `common`
+2) Introduce an interface to clearly separate `risk` from `common`
+3) Clean up class design inside `risk`/`report`
+4) Remove duplication of intents
+5) Add proper unit tests
+
+## Essentially:
+
+`TODO: image of spaghetti on plate down to component parts?`
+
+see https://youtu.be/koGpF1solzM?t=1602
+
+1. Spaghetti
+2. links of parts of spaghetti to represent tests
+3. separate into hermetic modules
+4. clean one module
+5. show all clean modules
+
+## Why
+
+Hopefully this changes the way you view legacy code. Since any code we write ourselves will be deemed 
+"legacy", whether it's now or later, let's have a little more compassion for the previous developers
+and rejuvenate our systems to satisfy ourselves and the business.
+
+
+## Questions?
+
+## Resources
+
+This talk has been adapted from Uberto Barbini, native of Venice, Italy
+* https://www.youtube.com/watch?v=-lB74Zg3QSw
+* https://www.youtube.com/watch?v=koGpF1solzM
+* https://github.com/uberto/alchemical
+* This talk: 
