@@ -21,19 +21,155 @@
 
 class: center, middle
 
-# Title
+# Working with Legacy Code
 
 ---
 
-# Agenda
+# Notes
 
-1. Introduction
-2. Deep-dive
-3. ...
+slides branches example: `slides/1` or `slides/what-is-legacy-code`
+
+demo code under `src/` branches: `demo/1.0`, `demo/1.1`, `demo/2.0`, etc
+
+???
+These are more notes
 
 ---
 
-# Introduction
+class: center
+
+# What is Legacy Code?
+
+<img src="https://i.imgur.com/1r2x3C6.jpg" width="250"/>
+
+--
+
+Code we've gotten from someone else
+
+--
+
+Code that hasn't been touched in living memory
+
+--
+
+Code you're afraid to touch
+
+
+--
+
+Code written by someone who is no longer around
+
+--
+
+Code without tests
+
+???
+No matter how well written it is, pretty, objected-oriented, or well encapsulated it is. Without tests, we can't change the behavior of our code quickly and verifiably. We can't be certain within a reasonable timeframe if our code is getting better or worse.
+
+---
+
+class: center
+
+# Clean Code
+
+<img src="https://i.imgur.com/igYy5Y5.png" width="250" />
+
+--
+
+Easy to understand
+
+--
+
+Easy to get under test
+
+--
+
+Easy to refactor
+
+--
+
+Easy to add features
+
+---
+
+class: center
+
+# Changing Software
+
+## Questions to ask yourself:
+
+<br />
+
+--
+
+1. .left[What changes do we have to make?]
+
+--
+
+2. .left[How will we know that we've done them correctly?]
+
+--
+
+3. .left[How will we know that we haven't broken anything?]
+
+--
+
+4. .left[How much change can you afford if changes are risky?]
+
+---
+
+class: center, middle
+
+# "If it's not broke, don't fix it."
+
+???
+It's tempting to think that we can minimize software problems and bugs by avoiding them, but, unfortunately, it always catches up with us.
+
+Avoiding creating new classes and methods leads to giganto-hard-to-understand-and-modify systems.
+
+---
+
+class: center
+
+# Two ways to change code
+
+--
+
+## Cover and Move
+
+--
+
+### and
+
+## Edit and Pray
+
+---
+
+class: center
+
+# Edit and Pray
+
+--
+
+<img src="https://energycentral.com/sites/default/files/styles/article_body/public/ece/nodes/355107/safety20net.png" width="450">
+
+Industry standard?
+
+---
+
+class: center
+
+# Cover and Move
+
+--
+
+<img src="https://www.huaxingnets.com/wp-content/uploads/2018/06/tech_safety_alpha.png" width="450" />
+
+
+Work with a safety net.
+
+
+
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
