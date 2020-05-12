@@ -96,6 +96,8 @@ class: center
 
 # Changing Software
 
+--
+
 ## Questions to ask yourself:
 
 <br />
@@ -155,6 +157,11 @@ class: center
 
 Industry standard?
 
+???
+Carefully plan changes <br />
+Make sure you understand code <br />
+Make the changes
+
 ---
 
 class: center
@@ -168,6 +175,119 @@ class: center
 
 Work with a safety net.
 
+???
+Cover = cover with tests. <br />
+We can make quick changes and find out very quickly if the effects were good or bad. <br />
+
+---
+
+class: center
+
+# Software Vise
+
+<br>
+
+<img src="https://images-na.ssl-images-amazon.com/images/I/61A18RWrAmL._AC_SY450_.jpg" width="450">
+
+**vise** *noun* a metal tool with movable jaws that are used to hold an object firmly in place while work is done on it, typically attached to a workbench.
+
+???
+Tests that detect change are like a vise around our code <br>
+The behavior of the code is fixed in place <br>
+Allowing us to be in more control of our work.
+
+---
+
+class: center
+
+# The Legacy Code Dilemma
+
+<img src="https://imgs.xkcd.com/comics/delicious.png" width="350">
+
+--
+
+???
+In order to make changes easier, often we have to break dependencies <br>
+
+--
+
+When we change code, we should have tests in place.
+
+To put tests in place, we often have to change code.
+
+--
+
+What do we do?
+
+Ehh. Be careful. Use your refactoring tools.
+
+---
+
+class: center
+
+# Working with Legacy Code
+
+<img src="https://f4.bcbits.com/img/a0897681528_10.jpg" width="350">
+
+--
+
+= how do we break dependencies?
+
+---
+
+class: center
+
+# (one) Legacy Code Change Algorithm
+
+
+---
+
+class: center
+
+# What else can we do?
+
+<br>
+
+???
+A broad test that covers a large swath of the application will help you notice if any of your changes break something.
+
+Since you have finite time to spend writing tests, it is more important to get broad coverage than targeted coverage.
+
+<br>
+
+Usually TDD writes just enough test code to make the tests fail; then writes model code only until all tests pass.
+
+When working with legacy code, the model code is mostly already written.
+
+Not uncommon to write a lot of tests before switching back to model code.
+
+--
+
+Focus more on broad coverage than targeted coverage.
+
+--
+
+Write a lot of tests before you can write a little.
+
+--
+
+Already have some large tests? Can they be morphed into unit tests?
+
+
+
+---
+
+class: center
+
+# Summing it Up
+
+--
+
+Some tests are better than none
+
+--
+
+Don't let the perfect be the enemy of good.
 
 
 
