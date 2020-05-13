@@ -239,6 +239,30 @@ class: center
 
 # (one) Legacy Code Change Algorithm
 
+--
+
+1. .left[Identify change points.]
+
+--
+
+1. .left[Find test points.]
+
+--
+
+1. .left[Break dependencies.]
+
+--
+
+1. .left[Write tests.]
+
+--
+
+1. .left[Make changes (and refactor).]
+
+--
+
+1. .left[<sup><sub>profit???</sub></sup>]
+
 
 ---
 
@@ -271,11 +295,110 @@ Write a lot of tests before you can write a little.
 
 --
 
-Already have some large tests? Can they be morphed into unit tests?
+Already have some tests? Can they be automated?
 
+--
 
+Already have some functional/acceptance/integration tests? <br>
+Can they be morphed into unit tests?
 
 ---
+
+class: center
+
+# Sunk Cost Fallacy
+
+<img src="https://i.pinimg.com/originals/76/18/e1/7618e1ebf2c62f6270441eeeb1e03e52.png" width="400">
+
+
+???
+When you continue a behavior as a result of the previously invested time, money, or effort.
+
+Examples:
+
+Over-eating to get your money's worth when you order too much food.
+
+Driving through a blizzard to get to a concert you paid $20 for.
+
+"If the costs outweigh the benefits, the extra costs incurred (inconvenience, time or even money) are held in a different mental account than the one associated with the ticket transaction"
+
+---
+
+class: center
+
+# I Can't Get This Class into a Test Harness
+
+--
+
+## Bringing a dependency into a test is hard.
+
+--
+
+Objects can't be instantiated easily.
+
+--
+
+The test refuses to build with the class in it.
+
+--
+
+The constructor we need to use does some wonky stuff.
+
+--
+
+The tests cannot currently *sense* what's happening in the 50-line constructor.
+
+
+???
+Test Harness: enabler that does the work of executing tests via a test library, and also generates an output (e.g. a report).
+
+This includes your test data and your test scenarios.
+
+Essentially, you have a complete test harness when I can click a button or run a command to execute all of your tests and generate a report.
+
+---
+
+class: center
+
+# Resources
+
+<img src="https://images-na.ssl-images-amazon.com/images/I/51ya8wirXeL._SX375_BO1,204,203,200_.jpg" width="250">
+
+???
+Podcasts, articles, blogs, videos, katas, etc.
+
+---
+
+class: center
+
+# Katas
+
+--
+
+[Trip Service](https://github.com/sandromancuso/trip-service-kata)
+
+--
+
+[Trivia](https://github.com/jbrains/trivia)
+
+--
+
+[Legacy Train](https://github.com/42skillz/liveCoding-LegacyTrain)
+
+--
+
+[Birthday Greetings](https://github.com/xpmatteo/birthday-greetings-kata)
+
+--
+
+And of course, [Gilded Rose](https://github.com/emilybache/GildedRose-Refactoring-Kata)
+
+--
+
+[<sub><sup><sub>*Fifty Shades of Legacy Goose Game*</sub></sup></sub>](https://github.com/xpepper/fifty-shades-of-legacy-goose-game)
+
+---
+
 
 class: center
 
