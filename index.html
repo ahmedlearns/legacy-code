@@ -23,16 +23,13 @@ class: center, middle
 
 # Working with Legacy Code
 
----
+<br>
+<br>
+<br>
+<br>
+<br>
+<span style="color: gray"><sub><sup>Ahmed Ismail</sup></sub></span>
 
-# Notes
-
-slides branches example: `slides/1` or `slides/what-is-legacy-code`
-
-demo code under `src/` branches: `demo/1.0`, `demo/1.1`, `demo/2.0`, etc
-
-???
-These are more notes
 
 ---
 
@@ -41,6 +38,13 @@ class: center
 # What is Legacy Code?
 
 <img src="https://i.imgur.com/1r2x3C6.jpg" width="250"/>
+
+???
+Any ideas?
+
+Without tests, no matter how well written it is, pretty, objected-oriented, or well encapsulated it is,
+
+we can't change the behavior of our code quickly and verifiably. We can't be certain within a reasonable timeframe if our code is getting better or worse.
 
 --
 
@@ -63,9 +67,6 @@ Code written by someone who is no longer around
 
 Code without tests
 
-???
-No matter how well written it is, pretty, objected-oriented, or well encapsulated it is. Without tests, we can't change the behavior of our code quickly and verifiably. We can't be certain within a reasonable timeframe if our code is getting better or worse.
-
 ---
 
 class: center
@@ -73,6 +74,9 @@ class: center
 # Clean Code
 
 <img src="https://i.imgur.com/igYy5Y5.png" width="250" />
+
+???
+Any ideas?
 
 --
 
@@ -133,7 +137,27 @@ Avoiding creating new classes and methods leads to giganto-hard-to-understand-an
 
 class: center
 
-# Two ways to change code
+# Sunk Cost Fallacy
+
+<img src="https://i.pinimg.com/originals/76/18/e1/7618e1ebf2c62f6270441eeeb1e03e52.png" width="400">
+
+
+???
+When you continue a behavior as a result of the previously invested time, money, or effort.
+
+Examples:
+
+Over-eating to get your money's worth when you order too much food.
+
+Driving through a blizzard to get to a concert you paid $20 for.
+
+"If the costs outweigh the benefits, the extra costs incurred (inconvenience, time or even money) are held in a different mental account than the one associated with the original work, transaction, etc."
+
+---
+
+class: center
+
+# Two Ways to Change Code
 
 --
 
@@ -141,7 +165,7 @@ class: center
 
 --
 
-### and
+and
 
 ## Edit and Pray
 
@@ -193,7 +217,9 @@ class: center
 
 ???
 Tests that detect change are like a vise around our code <br>
+
 The behavior of the code is fixed in place <br>
+
 Allowing us to be in more control of our work.
 
 ---
@@ -213,6 +239,8 @@ In order to make changes easier, often we have to break dependencies <br>
 
 When we change code, we should have tests in place.
 
+--
+
 To put tests in place, we often have to change code.
 
 --
@@ -220,18 +248,6 @@ To put tests in place, we often have to change code.
 What do we do?
 
 Ehh. Be careful. Use your refactoring tools.
-
----
-
-class: center
-
-# Working with Legacy Code
-
-<img src="https://f4.bcbits.com/img/a0897681528_10.jpg" width="350">
-
---
-
-= how do we break dependencies?
 
 ---
 
@@ -273,6 +289,8 @@ class: center
 <br>
 
 ???
+Any ideas?
+
 A broad test that covers a large swath of the application will help you notice if any of your changes break something.
 
 Since you have finite time to spend writing tests, it is more important to get broad coverage than targeted coverage.
@@ -295,7 +313,7 @@ Write a lot of tests before you can write a little.
 
 --
 
-Already have some tests? Can they be automated?
+Already have some manual tests? Can they be automated?
 
 --
 
@@ -306,21 +324,26 @@ Can they be morphed into unit tests?
 
 class: center
 
-# Sunk Cost Fallacy
+# Working with Legacy Code
 
-<img src="https://i.pinimg.com/originals/76/18/e1/7618e1ebf2c62f6270441eeeb1e03e52.png" width="400">
+<img src="https://f4.bcbits.com/img/a0897681528_10.jpg" width="350">
 
+--
+
+= how do we break dependencies?
+
+
+---
+
+class: center
+
+# Breaking Dependencies
+
+<img src="https://live.mrf.io/statics/i/ps/lrmonline.com/wp-content/uploads/2017/09/Motherboy.jpg" width="450">
 
 ???
-When you continue a behavior as a result of the previously invested time, money, or effort.
 
-Examples:
-
-Over-eating to get your money's worth when you order too much food.
-
-Driving through a blizzard to get to a concert you paid $20 for.
-
-"If the costs outweigh the benefits, the extra costs incurred (inconvenience, time or even money) are held in a different mental account than the one associated with the ticket transaction"
+Dependencies can be problematic, but, fortunately we can break them.
 
 ---
 
@@ -355,6 +378,202 @@ Test Harness: enabler that does the work of executing tests via a test library, 
 This includes your test data and your test scenarios.
 
 Essentially, you have a complete test harness when I can click a button or run a command to execute all of your tests and generate a report.
+
+---
+
+# The Case of the Irritating Parameter
+
+--
+
+```
+public class CreditValidator {
+
+  public CreditValidator(ReporterConnection connection,
+                        CreditMaster master,
+                        String validatorId) {
+    ...
+  }
+
+  ValidationCertificate validateCustomer(Customer customer)
+      throws InvalidCreditException {
+    ...
+  }
+}
+```
+
+--
+
+Mission: Add a method, `getValidationPercent`, to tell us the percentage of `validateCustomer` calls we've made over the life of a `CreditValidator`.
+
+--
+
+<br>
+<br>
+
+How do we get started?
+
+---
+
+## Just Try It
+
+--
+
+```
+public void testCanCreateValidator() {
+  CreditValidator validator = new CreditValidator();
+}
+```
+
+--
+
+<br>
+Best way to see if you can instantiate a class in a test is to just try to do it.
+
+--
+
+The compiler will do part of the work for you by telling you want you need to make it work.
+
+???
+Construction tests look a little weird. They don't have an assertion.
+
+Later on, when the object can be instantiated, the test can be repurposed to do something more meaningful.
+
+---
+
+## Digging Deeper
+
+--
+
+```
+public class ReporterConnection {
+
+  public ReporterConnection(int port, String username, String password)
+      throws IOException {
+    ...
+  }
+}
+```
+
+--
+
+```
+public class CreditMaster {
+
+  public CreditMaster(String filename, boolean isLocal) {
+    ...
+  }
+}
+
+```
+
+???
+
+When a connection is constructed, it connects with a server. It uses that connection to then retrieve reports needed to validate a customer's credit.
+
+CreditMaster gives us policy info that we can use in some credit decisions. It can load info from a spreadsheet and holds it in memory for us.
+
+---
+
+## So we just create these objects, right?
+
+```
+public void testCanCreateValidator() {
+  ReporterConnection connection =
+    new ReporterConnection(DEFAULT_PORT, "admin", "m4d$ki11s");
+
+  CreditMaster master = new CreditMaster("customers.csv", true);
+
+  CreditValidator validator =
+    new CreditValidator(connection, master, "a1234");
+}
+
+```
+
+--
+
+<br>
+What's wrong with this picture?
+
+???
+
+Creating a connection to a server is not a good idea. Why?
+
+Unit tests only tests the system under test (the constructor).
+
+Besides, it can take too long to get a connection, and the server may not always be available.
+
+---
+
+## What can we do instead?
+
+--
+
+There are many ways to go about this.
+
+--
+
+Mocking / stubbing have become a popular method.
+
+--
+
+...but be careful with mocking.
+
+---
+
+## On Mocking
+
+--
+
+Assuming we want a unit test to test a single codepath through a single method.
+
+--
+
+You will need to mock every dependency that your unit test touches.
+
+--
+
+Though that may sound good, if you're not careful, you'll spend all your time mocking dependencies, which can in turn unintentionally make your tests more complicated and probably even fragile.
+
+--
+
+TL;DR: unit tests should test a cohesive unit, which can be more than a single method, IMHO
+
+???
+Mock objects are good when you want to test interactions. You can test to see if a function was called.
+
+This can become problematic when you end up testing interactions even when not necessary.
+
+(provide example? https://stackoverflow.com/a/38260 ----- probably warrants it's own slide).
+
+We are really using the mock as a stub.
+
+I'm sure we can sit here and talk about when and where to use mock objects, but let's get back to it.
+
+---
+
+## Back to the program
+
+--
+
+```
+public void testCanCreateValidator() {
+  ReporterConnection connection = mock(ReporterConnection.class);
+
+  CreditMaster master = mock(CreditMaster.class);
+
+  CreditValidator validator =
+    new CreditValidator(connection, master, "a1234");
+}
+
+```
+
+---
+
+## Extract Interface
+
+???
+
+Mock objects are overkill in this case - we don't need to test the interaction of a validator and a connection right now.
 
 ---
 
