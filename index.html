@@ -30,6 +30,17 @@ class: center, middle
 <br>
 <span style="color: gray"><sub><sup>Ahmed Ismail</sup></sub></span>
 
+???
+I'm not going to pretend to be an expert in any of the things you are about to see in this presentation
+
+(or probably on anything in the realm of software development - I feel that we're all picking it up as we move along)
+
+* in the process of learning more about these techniques
+* figured I'd share it with you all
+* if you have any input or ideas on any of the slides, let's talk about it.
+* I'd be lieing if I said working on Aveanna's codebases didn't have anything to do with this interest :)
+
+
 
 ---
 
@@ -78,21 +89,23 @@ class: center
 ???
 Any ideas?
 
---
-
-Easy to understand
+* I know Alex has plenty of opinions on this. If you don't think so, then you haven't read his well-written medium article.
 
 --
 
-Easy to get under test
+Easier to understand
 
 --
 
-Easy to refactor
+Easier to get under test
 
 --
 
-Easy to add features
+Easier to refactor
+
+--
+
+Easier to add features
 
 ---
 
@@ -232,11 +245,6 @@ class: center
 
 --
 
-???
-In order to make changes easier, often we have to break dependencies <br>
-
---
-
 When we change code, we should have tests in place.
 
 --
@@ -297,11 +305,13 @@ Since you have finite time to spend writing tests, it is more important to get b
 
 <br>
 
-Usually TDD writes just enough test code to make the tests fail; then writes model code only until all tests pass.
+Usually TDD writes just enough test code to make the tests fail;
 
-When working with legacy code, the model code is mostly already written.
+then you write the model code (or business logic) only until all tests pass.
 
-Not uncommon to write a lot of tests before switching back to model code.
+When working with legacy code, the business logic is mostly already written.
+
+Not uncommon to write a lot of tests before switching back to business logic.
 
 --
 
@@ -351,6 +361,13 @@ class: center
 
 # I Can't Get This Class into a Test Harness
 
+???
+Test Harness: enabler that does the work of executing tests via a test library, and also generates an output (e.g. a report).
+
+This includes your test data and your test scenarios.
+
+Essentially, you have a complete test harness when I can click a button or run a command to execute all of your tests and generate a report.
+
 --
 
 ## Bringing a dependency into a test is hard.
@@ -370,14 +387,6 @@ The constructor we need to use does some wonky stuff.
 --
 
 The tests cannot currently *sense* what's happening in the 50-line constructor.
-
-
-???
-Test Harness: enabler that does the work of executing tests via a test library, and also generates an output (e.g. a report).
-
-This includes your test data and your test scenarios.
-
-Essentially, you have a complete test harness when I can click a button or run a command to execute all of your tests and generate a report.
 
 ---
 
@@ -403,12 +412,22 @@ public class CreditValidator {
 
 --
 
-Mission: Add a method, `getValidationPercent`, to tell us the percentage of `validateCustomer` calls we've made over the life of a `CreditValidator`.
+The Mission:
+
+* Add a method, `getValidationPercent`, to tell us the percentage of `validateCustomer` calls we've made over the life of a `CreditValidator`.
 
 --
 
-<br>
-<br>
+Step 1: Write a test.
+
+???
+But how are we going to bring a CreditValidator into a test with all of it's dependencies
+
+--
+
+...
+
+--
 
 How do we get started?
 
@@ -418,16 +437,17 @@ How do we get started?
 
 --
 
+Best way to see if you can instantiate a class in a test is to just try to do it.
+
+--
+
+<br>
 ```
 public void testCanCreateValidator() {
   CreditValidator validator = new CreditValidator();
 }
 ```
-
---
-
 <br>
-Best way to see if you can instantiate a class in a test is to just try to do it.
 
 --
 
@@ -582,6 +602,16 @@ class: center
 # Resources
 
 <img src="https://images-na.ssl-images-amazon.com/images/I/51ya8wirXeL._SX375_BO1,204,203,200_.jpg" width="250">
+
+--
+
+https://medium.com/7factor/refactoring-matters-863de0ed80d
+
+--
+
+"...since so many engineers have never even seen a filing cabinet, too late is far too common."
+
+- Alex McConnell, 2020
 
 ???
 Podcasts, articles, blogs, videos, katas, etc.
