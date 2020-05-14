@@ -35,16 +35,14 @@ I'm not going to pretend to be an expert in any of the things you are about to s
 
 (I feel that we're all picking it up as we move along)
 
-These are techniques I've picked up from reading some books and learning from others,
+These are techniques I've picked up from reading some books, learning from others (like you all), and accidently discovering on my own.
 
-including some of you listening in right now.
+A lot of these might seem like common sense, but I always find it useful to be reminded of the basics and to polish the foundations.
 
 * in the process of learning more about these techniques
 * figured I'd share it with you all
 * if you have any input or ideas on any of the slides, let's talk about it.
 * I'd be lieing if I said working on Aveanna's codebases didn't have anything to do with this interest :)
-
-
 
 ---
 
@@ -1104,11 +1102,189 @@ At least it's in a test, which is a fair trade, in my opinion.
 
 --
 
-We do have to reason for the future that `adjustSuspension` can be called in subclasses.
+We do have to reason for the future in that `adjustSuspension` can be called in subclasses.
 
 --
 
 But the whole point was to get this method in a test. Once we feel covered enough, we can separate the `Wheel` methods into different classes and make them testable like we originally wanted.
+
+---
+
+## Subverting Access Protection
+
+--
+
+Nowadays, there are ways to get access to private variables at runtime via reflection.
+
+--
+
+Although that's handy, it's a little like cheating.
+
+--
+
+Aside from reflection being potentially nasty in languages like Java, keeping tests that access private methods may prevent a team from noticing bad behavior like we saw in the `Wheel` class.
+
+--
+
+It may be considered even worse than just making the method public, as it might hide the bad code for long enough that it becomes too ridiculous to touch.
+
+???
+In general, I like to think about my habits when changing and extrapolate into the future to think about what the experience might be for a dev to change code in that code base.
+
+You all probably do that as well but I thought it was worth mentioning.
+
+---
+
+## That Case of the "Helpful" API
+
+--
+
+Language designers and library writers try to make our lives easier, but that's a tough job.
+
+--
+
+They have to balance security concerns against ease of programming and capabilities.
+
+--
+
+A lot of times, the way they do that is by making the class `final` or not supplying a `public` constructor.
+
+--
+
+Nowadays, there are libraries like [Mockito](https://www.baeldung.com/mockito-final) for Java that help us create fake objects of final classes somewhat easily.
+
+---
+
+## A C# Example
+
+```
+public void IList getFileStreams(HttpFileCollection files) {
+  ArrayList list = new ArrayList();
+  foreach (string name in files) {
+    HttpPostedFile file = files[name];
+    ... (some long conditions and esoteric logic)
+    list.Add(file.InputStream);
+  }
+  return list;
+}
+```
+
+???
+Any of you who have some experience with C# will probably notice weird syntactic mistakes (or worse), so feel free to mention them if you do find them.
+
+This is just a good example that I found and wanted to share.
+
+--
+
+The Mission: make some changes and maybe do some refactoring, starting off by covering the method with a test.
+
+--
+
+The Problem: Creating an `HttpFileCollection` and filling it with `HttpPostedFile` objects would be nice, but it's impossible.
+
+--
+
+Why? The class is both `sealed` and doesn't have a `public` constructor.
+
+???
+So we can't create an instance of the class and we can't subclass it.
+
+---
+
+## What are out options?
+
+--
+
+Fortunately, all we need to do with an `HttpFileCollection` is iterate through it and it has a superclass called `NameObjectCollectionBase`.
+
+--
+
+Now we can subclass it and pass our own object to `getFileStreams` (and use a better name):
+
+```
+public void IList getFileStreams(MyHttpFileCollection files) {
+  ArrayList list = new ArrayList();
+  foreach (string name in files) {
+    HttpPostedFile file = files[name];
+    ... (some long conditions and esoteric logic)
+    list.Add(file.InputStream);
+  }
+  return list;
+}
+```
+
+--
+
+In this case, we can lean on the compiler to let us know if we're missing anything.
+
+???
+`MyHttpCollection` is a subclass of `NameObjectCollectionBase` and `NameObjectCollectionBase` is an abstract class that associates strings with objects.
+
+--
+
+Now that we have that covered, we still need to create `HttpPostedFile` objects to run `getFileStreams` in a test.
+
+---
+
+## Let's get some separation
+
+--
+
+One technique we can use is to pull out an interface, `IHttpPostedFile` and wrap the API. Now we can write a wrapper and a fake class for testing:
+
+```
+public class HttpPostedFileWrapper : IHttpPostedFile
+{
+  public HttpPostedFileWrapper(HttpPostedFile file) {
+    this.file = file;
+  }
+
+  public int ContentLength {
+    get { return file.ContentLength; }
+  }
+}
+
+public class FakeHttpPostedFile : IHttpPostedFile
+{
+  public FakeHttpPostedFile(Stream stream, ...) { ... }
+
+  public int ContentLength {
+    get { return length; }
+  }
+}
+```
+
+---
+
+# Next: Lean on the compiler
+
+--
+
+We can use the two new classes while leaning on the compiler to update our production code and use the fake objects in our tests.
+
+--
+
+The method now doesn't care whether the wrapper or the fake object is used:
+
+```
+public void IList getFileStreams(MyHttpFileCollection files) {
+  ArrayList list = new ArrayList();
+  foreach (string name in files) {
+    IHttpPostedFile file = files[name];
+    ... (some long conditions and esoteric logic)
+    list.Add(file.InputStream);
+  }
+  return list;
+}
+```
+
+--
+
+But all is not well yet: we now have to iterate through the original `HttpFileCollection` in the production code to make sure that each `HttpPostedFile` is wrapped, then add it to a new collection that's then passed to `getFileStreams`.
+
+--
+
+This is by no means the perfect (or most elegant) solution, but it is a path to the security of test coverage.
 
 ---
 
@@ -1126,7 +1302,7 @@ Don't let the perfect be the enemy of good.
 
 --
 
-Ask yourself how you will know that you haven't broken anything?
+Ask yourself how you will know that you haven't broken anything.
 
 ---
 
