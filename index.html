@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Title</title>
+    <title>Legacy Code</title>
     <meta charset="utf-8">
     <style>
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -31,9 +31,13 @@ class: center, middle
 <span style="color: gray"><sub><sup>Ahmed Ismail</sup></sub></span>
 
 ???
-I'm not going to pretend to be an expert in any of the things you are about to see in this presentation
+I'm not going to pretend to be an expert in any of the things you are about to see in this presentation.
 
-(or probably on anything in the realm of software development - I feel that we're all picking it up as we move along)
+(I feel that we're all picking it up as we move along)
+
+These are techniques I've picked up from reading some books and learning from others,
+
+including some of you listening in right now.
 
 * in the process of learning more about these techniques
 * figured I'd share it with you all
@@ -165,6 +169,10 @@ Over-eating to get your money's worth when you order too much food.
 Driving through a blizzard to get to a concert you paid $20 for.
 
 "If the costs outweigh the benefits, the extra costs incurred (inconvenience, time or even money) are held in a different mental account than the one associated with the original work, transaction, etc."
+
+I included this slide because I feel that this is a very common fallacy to fall into, but can have huge ramifications when applied to software.
+
+I definitely fall pray to it myself, but it's good to be knowledgable of its existence.
 
 ---
 
@@ -311,7 +319,7 @@ then you write the model code (or business logic) only until all tests pass.
 
 When working with legacy code, the business logic is mostly already written.
 
-Not uncommon to write a lot of tests before switching back to business logic.
+It's sometimes necessary to write a lot of tests before switching back to business logic.
 
 --
 
@@ -337,6 +345,9 @@ class: center
 # Working with Legacy Code
 
 <img src="https://f4.bcbits.com/img/a0897681528_10.jpg" width="350">
+
+???
+If it's all about the tests, there's a big problem.
 
 --
 
@@ -370,7 +381,7 @@ Essentially, you have a complete test harness when I can click a button or run a
 
 --
 
-## Bringing a dependency into a test is hard.
+## Bringing a dependency into a test is hard because:
 
 --
 
@@ -416,12 +427,13 @@ The Mission:
 
 * Add a method, `getValidationPercent`, to tell us the percentage of `validateCustomer` calls we've made over the life of a `CreditValidator`.
 
+???
+What's step 1?
+
 --
 
 Step 1: Write a test.
 
-???
-But how are we going to bring a CreditValidator into a test with all of it's dependencies
 
 --
 
@@ -430,6 +442,9 @@ But how are we going to bring a CreditValidator into a test with all of it's dep
 --
 
 How do we get started?
+
+???
+But how are we going to bring a CreditValidator into a test with all of it's dependencies
 
 ---
 
@@ -473,6 +488,9 @@ public class ReporterConnection {
   }
 }
 ```
+
+???
+When a connection is constructed, it connects with a server. It uses that connection to then retrieve reports needed to validate a customer's credit.
 
 --
 
@@ -532,7 +550,7 @@ There are many ways to go about this.
 
 --
 
-Mocking / stubbing have become a popular method.
+Mocking, stubbing, etc. are the obvious ways that come to mind.
 
 --
 
@@ -544,7 +562,11 @@ Mocking / stubbing have become a popular method.
 
 --
 
-Assuming we want a unit test to test a single codepath through a single method.
+The Scenario: we want to write a unit test.
+
+--
+
+That is, a function that tests a single codepath through a single method.
 
 --
 
@@ -552,21 +574,85 @@ You will need to mock every dependency that your unit test touches.
 
 --
 
-Though that may sound good, if you're not careful, you'll spend all your time mocking dependencies, which can in turn unintentionally make your tests more complicated and probably even fragile.
+Though that may sound good, if you're not careful, you'll spend all your time mocking dependencies.
 
 --
 
-TL;DR: unit tests should test a cohesive unit, which can be more than a single method, IMHO
+Which can in turn unintentionally make your tests more complicated and probably even fragile.
+
+--
+
+In summary, unit tests should test a cohesive unit, which can be more than a single method, IMHO
+
+---
+
+## What about the whole focus on breaking dependencies?
+
+--
+
+## I don't have a real answer for you other than, software is complicated 🤷‍♂️
 
 ???
-Mock objects are good when you want to test interactions. You can test to see if a function was called.
+Mock objects are good when you want to test interactions, e.g. funcation a() was called exactly one time.
 
-This can become problematic when you end up testing interactions even when not necessary.
+This can become problematic when you end up testing interactions even when not necessary (I am guilty of this).
 
-(provide example? https://stackoverflow.com/a/38260 ----- probably warrants it's own slide).
+---
 
-We are really using the mock as a stub.
+## A Mocking Example
 
+--
+
+Overusing mocks to test interactions can lead to testing implementation (bad).
+
+--
+
+We really want to test that we have the intended result (most of the time).
+
+--
+
+Testing the result:
+```
+testTheThingIsSorted() {
+  var list = [5, 3, 2, 9]
+  sort(list)
+
+  assert([2, 3, 5, 9], list)
+}
+```
+
+--
+
+Testing the implementation:
+```
+testTheThingIsSorted() {
+  var list = [5, 3, 2, 9]
+  sort(list)
+
+  assert.that(compare(5,3)).was.called.once();
+  assert.that(compare(5,2)).was.called.once();
+  assert.that(compare(5,9)).was.called.once();
+  ...
+}
+```
+
+???
+If and when the implementation of `sort()` is changed, the first test still does it's job.
+
+---
+
+## Are mocks the same as stubs?
+
+--
+
+If you ask such people like Martin Fowler, his answer is a [resounding no](https://martinfowler.com/articles/mocksArentStubs.html).
+
+<br>
+<p align="center">
+  <img src="https://i.imgur.com/GbjPKuS.png" width="550">
+</p>
+
+???
 I'm sure we can sit here and talk about when and where to use mock objects, but let's get back to it.
 
 ---
@@ -575,6 +661,14 @@ I'm sure we can sit here and talk about when and where to use mock objects, but 
 
 --
 
+Mocking libraries usually allow creating objects to be used as *dummy objects*.
+
+???
+Dummy objects: are passed around but never actually used. Usually they are just used to fill parameter lists like in this example.
+
+--
+
+<br>
 ```
 public void testCanCreateValidator() {
   ReporterConnection connection = mock(ReporterConnection.class);
@@ -587,9 +681,44 @@ public void testCanCreateValidator() {
 
 ```
 
+--
+
+<br>
+Compiler should be happy now, so we should be good to start additional testing.
+
+--
+
+If it felt like using a mock is overkill here, that's because it likely is.
+
 ---
 
 ## Extract Interface
+
+--
+
+With this method, let's create a *fake object* by creating an interface first.
+
+--
+
+<br>
+```
+public interface IReporterConnection {
+  connect()
+  disconnect()
+  Report createReport(int customerId)
+}
+```
+
+--
+
+```
+public class FakeConnection implements IReporterConnection {
+  public Report report;
+  public void connect() {}
+  public void disconnect() {}
+  public Report createReport(int customerId) {}
+}
+```
 
 ???
 
@@ -597,21 +726,174 @@ Mock objects are overkill in this case - we don't need to test the interaction o
 
 ---
 
+## Let's Fake It 'till We Make It
+
+--
+
+```
+public void testCanValidateCustomer() {
+  FakeConnection connection = new FakeConnection();
+
+  CreditMaster master = new CreditMaster("customers.csv", true);
+
+  CreditValidator validator =
+    new CreditValidator(connection, master, "a1234");
+
+  Certificate result = validator.validateCustomer(...);
+
+  assertEquals(Certificate.VALID, result.getStatus());
+}
+```
+
+---
+
+## Pass the Null
+
+--
+
+When you are writing tests and an object has a tough dependency to construct, *consider passing null instead*.
+
+--
+
+If the parameter is in use, rely on an exception being thrown to tell you where.
+
+--
+
+You can decide at that point whether you really need that parameter.
+
+--
+
+<br>
+```
+public void testCanCreateTheThing() {
+  CreditValidator validator = new CreditValidator(null, null, "abc1234");
+}
+```
+
+--
+
+<br>
+**Remember**: This is a test. Unless you know what you're doing, don't do this in production code.
+
+---
+
+# The Case of the Hidden Dependency
+
+--
+
+```
+public class NurseScheduler {
+  public NurseScheduler() {
+    Scheduler scheduler = new Scheduler();
+
+    int nurseType = 17;
+
+    scheduler.doSomethingProbablyNotIdempotent();
+
+    if (scheduler.getStatus() == AVAILABLE) {
+      scheduler.register(this, nurseType);
+    } else
+      scheduler.iAmTooCoolForCurlyBraces();
+  }
+}
+```
+
+--
+
+<br>
+Let's get this in a test
+
+--
+
+What's wrong with this picture?
+
+--
+
+Also, what does `17` even mean?
+
+---
+
+## Parameterize the Constructor
+
+--
+
+```
+public NurseScheduler(Scheduler scheduler) {
+  int nurseType = 17;
+
+  scheduler.doSomethingProbablyNotIdempotent();
+
+  if (scheduler.getStatus() == AVAILABLE) {
+    scheduler.register(this, nurseType);
+  } else
+    scheduler.iAmTooCoolForCurlyBraces();
+}
+```
+
+--
+
+This may not seem like much of an improvement, but it gives us more leverage.
+
+--
+
+We can now create a ~~mock~~ dummy object, or a fake object using the *Extract Interface* technique.
+
+---
+
+## What if we need to preserve the signature?
+
+--
+
+Sometimes, there is too much risk and/or negative consequences to changing a constructor or method signature.
+
+--
+
+If you're in a language that allows it, **overload the constructors**. If you're not, create a new method.
+
+--
+
+```
+public NurseScheduler() {
+  init(new Scheduler());
+}
+
+public init(Scheduler scheduler) {
+  int nurseType = 17;
+
+  scheduler.doSomethingProbablyNotIdempotent();
+
+  if (scheduler.getStatus() == AVAILABLE) {
+    scheduler.register(this, nurseType);
+  } else
+    scheduler.iAmTooCoolForCurlyBraces();
+}
+
+```
+
+???
+There are many ways to get passed this.
+
+Override a getter? Override a factory method?
+
+Feel free to get creative.
+
+---
+
 class: center
 
 # Resources
 
-<img src="https://images-na.ssl-images-amazon.com/images/I/51ya8wirXeL._SX375_BO1,204,203,200_.jpg" width="250">
+<img src="https://images-na.ssl-images-amazon.com/images/I/51ya8wirXeL._SX375_BO1,204,203,200_.jpg" width="200">
 
 --
 
-https://medium.com/7factor/refactoring-matters-863de0ed80d
+.left[https://medium.com/7factor/refactoring-matters-863de0ed80d]
 
 --
 
-"...since so many engineers have never even seen a filing cabinet, too late is far too common."
+.left["...since so many engineers have never even seen a filing cabinet, too late is far too common."]
 
-- Alex McConnell, 2020
+.right[<span style="color: gray"><sub><sup>-- Alex McConnell, 2020</sup></sub></span>]
 
 ???
 Podcasts, articles, blogs, videos, katas, etc.
@@ -640,7 +922,7 @@ class: center
 
 --
 
-And of course, [Gilded Rose](https://github.com/emilybache/GildedRose-Refactoring-Kata)
+[Gilded Rose](https://github.com/emilybache/GildedRose-Refactoring-Kata)
 
 --
 
@@ -660,6 +942,16 @@ Some tests are better than none
 --
 
 Don't let the perfect be the enemy of good.
+
+--
+
+Ask yourself how you will know that you haven't broken anything?
+
+---
+
+class: center, middle
+
+# Thoughts / Questions?
 
 
 
