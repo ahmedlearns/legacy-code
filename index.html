@@ -261,7 +261,12 @@ To put tests in place, we often have to change code.
 
 What do we do?
 
-Ehh. Be careful. Use your refactoring tools.
+Be careful. Use your refactoring tools.
+
+???
+As you'll see as we go through a few techniques, there's not a one size fits all solution in MOST cases.
+
+So be careful, maybe use your creativity and the tools you have.
 
 ---
 
@@ -965,7 +970,7 @@ That makes the methods testable and the design better.
 
 --
 
-That might sound a little harsh, but it's worth it. Well-designed code is testable.
+That might sound a little harsh, but it's worth it. Well-designed code is code that is, in part, testable.
 
 ---
 
@@ -1014,6 +1019,16 @@ In the process, `setSportModeSetting` may make repeated calls to `adjustSuspensi
 
 Unfortunately, a few of the API's used by `setSportModeSetting` have changed, and we need to make a change to `adjustSuspension`.
 
+???
+<br>
+How did we get into this mess?
+
+This class has too many responsibilities.
+
+What we should do is refactor.
+
+But our hands our tied since we need to be careful with refactoring right now.
+
 ---
 
 ## Can we just make it public?
@@ -1029,26 +1044,6 @@ That can have some very negative consequences.
 --
 
 If `adjustSuspension` is called outside of `setSportModeSetting`, it could cause some trouble with the suspension changing unexpectedly at high speeds.
-
----
-
-## Before we move further
-
---
-
-How did we get into this mess?
-
---
-
-This class has too many responsibilities.
-
---
-
-What we should do is refactor.
-
---
-
-But our hands our tied since we need to be careful with refactoring right now.
 
 ???
 Why? Could be a number of reasons.
@@ -1100,19 +1095,19 @@ I know, I know. The point was to not make the method public. We're making it `pr
 
 ---
 
-## Ehh.
+## At least it's in a test
 
 --
 
-At least it's in a test, which is a fair trade, in my opinion.
+Which is a fair trade, in my opinion.
 
 --
 
-We do have to reason for the future in that `adjustSuspension` can be called in subclasses.
+**But**, we do have to reason for the future in that `adjustSuspension` can be called in subclasses.
 
 --
 
-But the whole point was to get this method in a test. Once we feel covered enough, we can separate the `Wheel` methods into different classes and make them testable like we originally wanted.
+Although, the whole point was to get this method in a test. Once we feel covered enough, we can separate the `Wheel` methods into different classes and make them testable like we originally wanted.
 
 ---
 
