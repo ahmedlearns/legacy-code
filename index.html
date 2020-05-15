@@ -364,6 +364,10 @@ class: center
 
 Dependencies can be problematic, but, fortunately we can break them.
 
+Arrested Development
+
+Buster and Lucille
+
 ---
 
 # I Can't Get This Class into a Test Harness
@@ -462,7 +466,7 @@ public void testCanCreateValidator() {
 
 --
 
-The compiler will do part of the work for you by telling you want you need to make it work.
+The compiler will do part of the work for you by telling you what you need to make it work.
 
 ???
 Construction tests look a little weird. They don't have an assertion.
@@ -501,9 +505,6 @@ public class CreditMaster {
 ```
 
 ???
-
-When a connection is constructed, it connects with a server. It uses that connection to then retrieve reports needed to validate a customer's credit.
-
 CreditMaster gives us policy info that we can use in some credit decisions. It can load info from a spreadsheet and holds it in memory for us.
 
 ---
@@ -582,16 +583,19 @@ In summary, unit tests should test a cohesive unit, which can be more than a sin
 
 ---
 
-## What about the whole focus on breaking dependencies?
+## When are mock objects good to use?
 
 --
 
-## I don't have a real answer for you other than, software is complicated 🤷‍♂️
+Mock objects are good when you want to test interactions. For example, that function `doThing()` was called exactly N times.
 
-???
-Mock objects are good when you want to test interactions, e.g. funcation a() was called exactly one time.
+--
 
-This can become problematic when you end up testing interactions even when not necessary (I am guilty of this).
+This can start to become problematic when you end up testing interactions even when not necessary.
+
+--
+
+<sub>(I have been guilty of this)</sub>
 
 ---
 
@@ -938,7 +942,7 @@ Here are some possible reasons:
 
 --
 
-1. It's just a utility method. It's not something that a client of the class would care about.
+1. It's a utility method, but it's not something that a client of the class would care about.
 
 --
 
@@ -961,11 +965,14 @@ That makes the methods testable and the design better.
 
 --
 
-I know that sounds a little harsh, but it's worth it Remember, good design is test-*able*.
+That might sound a little harsh, but it's worth it. Well-designed code is testable.
 
 ---
 
 ## What if that much refactoring is too risky?
+
+???
+Let's say there aren't many tests in place and we are forced to be more careful before we can start to break down the class.
 
 --
 
@@ -980,7 +987,6 @@ public class Wheel {
 
 ```
 ???
-Let's say there aren't many tests in place and we are forced to be more careful before we can start to break down the class.
 
 This is a bit of an exaggerated example, but it will still show the point.
 
@@ -1129,13 +1135,13 @@ Aside from reflection being potentially nasty in languages like Java, keeping te
 It may be considered even worse than just making the method public, as it might hide the bad code for long enough that it becomes too ridiculous to touch.
 
 ???
-In general, I like to think about my habits when changing and extrapolate into the future to think about what the experience might be for a dev to change code in that code base.
+In general, I like to think about my habits when changing code and extrapolate into the future to think about what the experience might be for a dev to change code in that code base.
 
 You all probably do that as well but I thought it was worth mentioning.
 
 ---
 
-## That Case of the "Helpful" API
+## The Case of the "Helpful" API
 
 --
 
@@ -1195,7 +1201,11 @@ So we can't create an instance of the class and we can't subclass it.
 
 --
 
-Fortunately, all we need to do with an `HttpFileCollection` is iterate through it and it has a superclass called `NameObjectCollectionBase`.
+Fortunately, all we need to do with an `HttpFileCollection` is iterate through it and extract out the streams.
+
+--
+
+We find that it has a superclass called `NameObjectCollectionBase` that is *not* sealed.
 
 --
 
@@ -1294,7 +1304,7 @@ class: center
 
 --
 
-Some tests are better than none
+Some tests are better than none.
 
 --
 
